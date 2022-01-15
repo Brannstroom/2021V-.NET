@@ -2,52 +2,88 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Blogging.DataAccess.ConsoleApp
 {
     class Program
     {
+
         static void Main(string[] args)
         {
+            BloggingContext db = getBloggingContext();
             Console.WriteLine("Hello World!");
+            Console.WriteLine($"Database path: " + db.DbPath);
+
+            Create("www.google.com");
         }
-    }
 
-    public class BloggingContext : DbContext
-    {
-        public DbSet<Blog> Blogs { get; set; }
-        public DbSet<Post> Posts { get; set; }
-
-        public BloggingContext()
+        static void Create(String url)
         {
+            Console.WriteLine("Inserting a new blog");
 
+            BloggingContext db = getBloggingContext();
+
+            Blog blog = new()
+            {
+                Url = url,
+            };
+
+            db.Add(blog);
+
+            Console.WriteLine("Added blog: " + url);
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        static void Read(BloggingContext db)
         {
-            SqlConnectionStringBuilder connectionStringBuilder = new();
-            connectionStringBuilder.DataSource = @"(localdb)\MSSQLLocalDB";
-            
-            
-            options.UseSqlServer();
+            Console.WriteLine("Querying for a blog");
+
+            var blog = db.Blogs
+                .OrderBy(b => b.BlogId)
+                .First();
+
+            Console.WriteLine(blog);
         }
-    }
 
-    public class Blog
-    {
-        public int BlogId { get; set; }
-        public string Url { get; set; }
+        static void Update(BloggingContext db, Blog blog, String url)
+        {
+            Console.WriteLine("Trying to update blog " + blog.BlogId + " with the new url " + url);
 
-        public List<Post> Posts { get; } = new();
-    }
+            blog.Url = url;
+            db.SaveChanges();
 
-    public class Post
-    {
-        public int PostId { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
+            Console.WriteLine("Blog updated with new url.");
+            Console.WriteLine(blog);
+        }
 
-        public int BlogId { get; set; }
-        public Blog Blog { get; set; }
+        static void Delete(BloggingContext db, Blog blog)
+        {
+            Console.WriteLine("Trying to delete blog with id " + blog.BlogId);
+
+            db.Remove(blog);
+            db.SaveChanges();
+
+            Console.WriteLine("Blog " + blog.BlogId + " deleted.");
+        }
+
+        static Blog getBlog(int id)
+        {
+            DbSet<Blog> blogs = getBloggingContext().Blogs;
+
+            foreach (Blog b in blogs)
+            {
+                if(b.BlogId == id)
+                {
+                    return b;
+                }
+            }
+
+            return null;
+        }
+
+        static BloggingContext getBloggingContext()
+        {
+            return new BloggingContext();
+        }
     }
 }
