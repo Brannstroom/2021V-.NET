@@ -1,19 +1,15 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
-namespace Blogging.DataAccess.ConsoleApp
+namespace EFGetStarted
 {
     public class BloggingContext : DbContext
     {
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<User> Users { get; set; }
-        
+
         public string DbPath { get; }
 
         public BloggingContext()
@@ -53,14 +49,5 @@ namespace Blogging.DataAccess.ConsoleApp
 
         public int BlogId { get; set; }
         public Blog Blog { get; set; }
-        
-        public User User { get; set; }
-    }
-
-    public class User
-    {
-        public int UserId { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
     }
 }

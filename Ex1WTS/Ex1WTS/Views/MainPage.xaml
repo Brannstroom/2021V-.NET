@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="Ex1WTS.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Style="{StaticResource PageStyle}"
+    mc:Ignorable="d">
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+        <Grid
+            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+            <!--
+                The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
+                Place your content here.
+            -->
+
+            <TextBox Name="mainPageText" Text="Dette feltet endres når du klikker på knappen" HorizontalAlignment="Center" Margin="0,15,0,861">
+            </TextBox>
+
+            <StackPanel x:Name="LayoutRoot" Margin="10">
+                <Button x:Name="btn2" Content="Klikk for å endre tekst i tekstfeltet over"
+                         Click="button1_Click"
+                         ClickMode="Press"
+                         Width="357" 
+                         Foreground="Blue" Height="136" HorizontalAlignment="Center" Margin="0,150,0,0"/>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</Page>
