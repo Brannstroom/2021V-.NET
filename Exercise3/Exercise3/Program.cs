@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -10,9 +11,8 @@ namespace Exercise3
     {
         static void Main()
         {
-            Console.WriteLine("Commands:                       - example ");
-            Console.WriteLine(@" compress <path>               - compress F:\School\Assignment\exercise3.pdf");
-            Console.WriteLine(@" decompress <path> <filetype>  - decompress F:\School\Assignment\exercise3.gz .pdf");
+            Console.WriteLine("Compress/Decompress using the commands 'compress <path> <filetype>' and 'decompress <path>' \n" +
+                "examples: 'compress F:\\School\\Assignment\\exercise3.pdf' 'decompress F:\\School\\Assignment\\exercise3.gz .pdf'");
             NewInput();
             
         }
@@ -20,26 +20,31 @@ namespace Exercise3
         private static void NewInput()
         {
             Console.WriteLine("\nEnter a command: ");
-            string command = Console.ReadLine();
-            var path = "";
-            try
+            string[] command = Console.ReadLine().Split(' ');
+
+            if(command.Length >= 2)
             {
-                path = @command.Split(' ').Skip(1).FirstOrDefault();
-                if(!File.Exists(path))
-                {
-                    Console.WriteLine("Could not find file on specified path.");
-                }
+                ProcessCommand(command);
             }
-            catch(Exception exception)
+            else
             {
-                Console.WriteLine(exception.StackTrace);
+                Console.WriteLine("A problem occurred. You must at least enter a command containing compression-type (compress/decompress) and a path.");
             }
 
-            if (command.ToLower().StartsWith("compress")) Process(path);
-            else if (command.ToLower().StartsWith("decompress"))
+            NewInput();
+        }
+
+        private static void ProcessCommand(string[] command)
+        {
+            var path = command[1];
+            if (!File.Exists(path)) Console.WriteLine("Could not find file on specified path.");
+
+            if (command[0].ToLower().StartsWith("compress")) Process(path);
+
+            else if (command[0].ToLower().StartsWith("decompress") && command.Length >= 3)
             {
-                var fileExtension = @command.Split(' ').Skip(2).FirstOrDefault();
-                if (fileExtension != null && fileExtension.StartsWith("."))
+                var fileExtension = command[2];
+                if (fileExtension.StartsWith("."))
                 {
                     Process(path, fileExtension);
                 }
@@ -50,10 +55,9 @@ namespace Exercise3
             }
             else
             {
-                Console.WriteLine("You did not enter a valid command.");
+                Console.WriteLine("You did not enter a valid command. In case of decompression - did you remember to add file-type/extension?");
             }
 
-            NewInput();
         }
 
         private static void Process(string path, string fileExtension = "")
@@ -66,21 +70,25 @@ namespace Exercise3
             var newPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + extension;
 
             using FileStream fileStream = File.Open(path, FileMode.Open);
-            using FileStream outputFileStream = File.Create(newPath);
-
-            if(fileExtension == "")
-            {
-                using GZipStream processor = new(outputFileStream, compressionMode);
-                fileStream.CopyTo(processor);
-            }
-            else
-            {
-                using GZipStream processor = new(fileStream, compressionMode);
-                processor.CopyTo(outputFileStream);
-            }
-            stopWatch.Stop();
+            Compress(fileExtension == "" ? CompressionType.Compress : CompressionType.Decompress, fileStream, newPath);
 
             Console.WriteLine("Successfully " + compressionMode.ToString().ToLower() + $"ed the file in {stopWatch.ElapsedMilliseconds} milliseconds from {new FileInfo(path).Length} bytes to {new FileInfo(newPath).Length} bytes.");
+        }
+
+        private static void Compress(CompressionType compressionType, FileStream fileStream, string newPath)
+        {
+            using FileStream outputFileStream = File.Create(newPath);
+
+            if(compressionType.Equals(CompressionType.Compress))
+            {
+                using GZipStream processor = new(outputFileStream, (CompressionMode)compressionType);
+                fileStream.CopyTo(processor);
+            }
+            else if (compressionType.Equals(CompressionType.Decompress))
+            {
+                using GZipStream processor = new(fileStream, (CompressionMode)compressionType);
+                processor.CopyTo(outputFileStream);
+            } 
         }
     }
 }
