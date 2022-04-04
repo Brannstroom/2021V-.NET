@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exercise5-UML", "Exercise5-UML\Exercise5-UML.csproj", "{3A7F8181-473F-4506-ADF7-1B2D90CEA84F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3A7F8181-473F-4506-ADF7-1B2D90CEA84F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A7F8181-473F-4506-ADF7-1B2D90CEA84F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A7F8181-473F-4506-ADF7-1B2D90CEA84F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A7F8181-473F-4506-ADF7-1B2D90CEA84F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4B8A90A0-DBCA-40CA-B6B6-16FAC6F35206}
+	EndGlobalSection
+EndGlobal
