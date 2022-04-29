@@ -9,7 +9,6 @@ namespace Exercise6.API.Models
     public class Course
     {
         [Required(ErrorMessage = "CourseId is required")]
-        [StringLength(int.MaxValue, MinimumLength = 1)]
         public int CourseId { get; set; }
         [Required(ErrorMessage = "CourseName is required")]
         [StringLength(50, MinimumLength = 1)]
@@ -17,23 +16,23 @@ namespace Exercise6.API.Models
 
         public List<Student> Students { get; set; }
 
-        public string GetString()
+        public string GetString(bool includeStudents)
         {
-            string studentString = "";
-            if(Students != null)
+            if(includeStudents && Students != null)
             {
-                Students.ForEach(student =>
+                if(Students.Count > 0)
                 {
-                    studentString += (
-                        student.FirstName + " " + student.LastName + " (ID: " + student.StudentId + "), "
-                    );
-                });
+                    return CourseId + " | " + CourseName + " | " + Students.Count + " students";
+                }
+                else
+                {
+                    return CourseId + " | " + CourseName + " | "  + "0 students";
+                }
             }
             else
             {
-                studentString = "No students.";
+                return CourseId + " | " + CourseName;
             }
-            return CourseName + " (ID: " + CourseId + "), Students: " + studentString;
         }
 
     }
